@@ -14,7 +14,6 @@ class ViewController: UIViewController  {
     
         
     let psiService = PSIService()
-    //var arrRegion: [Region] = []
     var mapHelper: [MapHelper] = []
     
     @IBOutlet weak var mapView: MKMapView!
@@ -25,7 +24,7 @@ class ViewController: UIViewController  {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated) // No need for semicolon
+        super.viewWillAppear(animated)
         
         psiService.urlSession(){ regionResult,itemResult, errorMessage in
             if let regionResult = regionResult {
@@ -36,7 +35,6 @@ class ViewController: UIViewController  {
     }
     
      // MARK: - Helper methods
-    
     func updateMapView(region:[Region], item:Items) {
         mapView.delegate = self
         mapView.register(MapView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
@@ -46,7 +44,6 @@ class ViewController: UIViewController  {
     
     
     func loadInitialData(region:[Region], item:Items) {
-        
         for regionValue in region {
             print(regionValue.latitude)
             print(regionValue.longitude)
@@ -68,7 +65,6 @@ class ViewController: UIViewController  {
                 }
                  details = details + readingValue.name + " : " + doubleToString + "\n"
             }
-            
             mapHelper.append(MapHelper(title: "Readings : " + regionValue.name, details: details, discipline: "", coordinate: coordinate))
         }
     }
@@ -76,15 +72,12 @@ class ViewController: UIViewController  {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
 
 
 extension ViewController: MKMapViewDelegate {
-    
-    
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
+        func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
                  calloutAccessoryControlTapped control: UIControl) {
         let location = view.annotation as! MapHelper
         let launchOptions = [MKLaunchOptionsDirectionsModeKey:
@@ -93,9 +86,3 @@ extension ViewController: MKMapViewDelegate {
     }
     
 }
-
-
-    
-    
-
-

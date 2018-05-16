@@ -26,10 +26,7 @@ class PSIService: NSObject {
 
 func urlSession(completion: @escaping RegionResult) {
     
-    //dataTask?.cancel()
     if var urlComponents = URLComponents(string: "https://api.data.gov.sg/v1/environment/psi") {
-        // urlComponents.query = "media=music&entity=song&term=\(searchTerm)"
-        // 3
         guard let url = urlComponents.url else { return }
         // 4
         dataTask = defaultSession.dataTask(with: url) { data, response, error in
@@ -48,7 +45,6 @@ func urlSession(completion: @escaping RegionResult) {
                 }
             }
         }
-        // 7
         dataTask?.resume()
     }
     
@@ -71,17 +67,13 @@ func urlSession(completion: @escaping RegionResult) {
         }
         
         
-       // var index = 0
         for regionDictionary in arrayRegion {
             if let regionDictionary = regionDictionary as? JSONDictionary,
                 let labelLocation = regionDictionary["label_location"] as? NSDictionary,
                 let name = regionDictionary["name"] as? String {
                 let latitude = labelLocation["latitude"] as? Double
-                // print(latitude)
                 let longitude = labelLocation["longitude"] as? Double
-                // print(longitude)
                 region.append(Region(name: name, latitude: latitude!,longitude: longitude!))
-               // index += 1
             } else {
                 errorMessage += "Problem parsing trackDictionary\n"
             }

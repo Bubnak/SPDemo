@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PSIIndex/ViewController/MainVC/ViewController.swift"
-            timestampString = "548162354.899112"
+            timestampString = "548172199.766216"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
             landmarkName = "loadInitialData(region:item:)"
             landmarkType = "7">
          </BreakpointContent>
