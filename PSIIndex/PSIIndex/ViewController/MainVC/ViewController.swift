@@ -13,14 +13,16 @@ class ViewController: UIViewController  {
     
     let psiService = PSIService()
     var mapHelper: [MapHelper] = []
-    let regionRadius: CLLocationDistance = 100000
+    let regionRadius: CLLocationDistance = 28000
     
     @IBOutlet weak var updatedDate: UIBarButtonItem!
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.callPSIAPI()
+        let initialLocation = CLLocation(latitude: 1.35735, longitude: 103.82)
+        centerMapOnLocation(location: initialLocation)
+        //self.callPSIAPI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,7 +108,19 @@ class ViewController: UIViewController  {
         }
         self.updatedDate.title = "Last Updated: " + (timestamp as String)
     }
+    
+    func centerMapOnLocation(location: CLLocation) {
+        print(regionRadius)
+        print(location.coordinate.longitude)
+        print(location.coordinate.latitude)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(location.coordinate,
+                                                                  regionRadius, regionRadius)
+        mapView.setRegion(coordinateRegion, animated: true)
+    }
+    
 }
+
+
 
 // MARK: - extenion
 extension ViewController: MKMapViewDelegate {
