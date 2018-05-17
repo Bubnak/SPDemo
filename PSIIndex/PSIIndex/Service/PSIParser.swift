@@ -9,13 +9,6 @@
 import UIKit
 
 class PSIParser: PSIService {
-    
-//    var items : Items?
-//    var region: [Region] = []
-//    var north :North?
-//    var readings: [Readings] = []
-//    typealias JSONDictionary = [String: Any]
-//    var errorMessage = ""
 
     func parseRegionResults(regionResponse:JSONDictionary) -> ( [Region]){
         guard let arrayRegion = regionResponse["region_metadata"] as? [Any] else {
@@ -43,7 +36,6 @@ class PSIParser: PSIService {
         
         guard let arrayReadings = response["items"] as? [Any] else {
             errorMessage += "Dictionary does not contain results key\n"
-            //items = Items()
             return items
         }
         
@@ -54,7 +46,6 @@ class PSIParser: PSIService {
                 let reading = readingsDictionary["readings"] as? NSDictionary{
                 self.parseReading(readingsDict:reading)
                 items = Items(timeStamp: timeStamp, updateTimeStamp: updateTimeStamp, readings: readings)
-                //items = Items()
             } else {
                 errorMessage += "Problem parsing trackDictionary\n"
             }
@@ -62,8 +53,6 @@ class PSIParser: PSIService {
         
         return items
     }
-    
-    
     
     fileprivate func parseReading(readingsDict: NSDictionary){
         let keys = readingsDict.allKeys as! [String]

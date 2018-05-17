@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 class ViewController: UIViewController  {
-        
+    
     let psiService = PSIService()
     var mapHelper: [MapHelper] = []
     let regionRadius: CLLocationDistance = 100000
@@ -22,7 +22,7 @@ class ViewController: UIViewController  {
         super.viewDidLoad()
         self.callPSIAPI()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -39,29 +39,30 @@ class ViewController: UIViewController  {
     }
     
     
-    
-    
-     // MARK: - Helper methods
+    // MARK: - Helper methods
     func callPSIAPI(){
         if Reachability.isConnectedToNetwork(){
+            self.updatedDate.tintColor = UIColor.black
             psiService.urlSession(){ regionResult,itemResult, errorMessage in
                 if let regionResult = regionResult , let itemResult = itemResult{
                     self.updateMapView(region: regionResult, item: itemResult)
                     self.updateTime(time: itemResult.updateTimeStamp)
                 }
-                if !errorMessage.isEmpty { print("Search error: " + errorMessage) }
+                if !errorMessage.isEmpty { self.showAlert(title: "Error: No Data") }
             }
-            print("Internet Connection Available!")
         }else{
-            let alert = UIAlertController(title: "No Internet Connection!", message: "", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            print("Internet Connection not Available!")
+            
             self.updatedDate.tintColor = UIColor.red
             self.updatedDate.title = "No internet connection!!!!!!!!!!"
+            self.showAlert(title: "No Internet Connection!")
         }
         
         
+    }
+    func showAlert(title:String)  {
+        let alert = UIAlertController(title:title, message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func updateMapView(region:[Region], item:Items) {
@@ -73,34 +74,32 @@ class ViewController: UIViewController  {
     
     func loadInitialData(region:[Region], item:Items) {
         for regionValue in region {
-            print(regionValue.latitude)
-            print(regionValue.longitude)
-            print(regionValue.name)
             let coordinate = CLLocationCoordinate2D(latitude: regionValue.latitude, longitude: regionValue.longitude)
             var details: String = ""
             for readingValue in item.readings{
                 var doubleToString = ""
-                if("north" == regionValue.name){
-                     doubleToString = String(readingValue.north)
-                }else if("south" == regionValue.name){
-                     doubleToString = String(readingValue.south)
-                }else if("east" == regionValue.name){
-                     doubleToString = String(readingValue.east)
-                }else if("west" == regionValue.name){
-                     doubleToString = String(readingValue.west)
-                }else if("central" == regionValue.name){
-                     doubleToString = String(readingValue.central)
+                switch regionValue.name {
+                case "north":
+                    doubleToString = String(readingValue.north)
+                case "south":
+                    doubleToString = String(readingValue.south)
+                case "east":
+                    doubleToString = String(readingValue.east)
+                case "west":
+                    doubleToString = String(readingValue.west)
+                case "central":
+                    doubleToString = String(readingValue.central)
+                default: break
+                    
                 }
-                 details = details + readingValue.name + " : " + doubleToString + "\n"
+                details = details + readingValue.name + " : " + doubleToString + "\n"
             }
             mapHelper.append(MapHelper(title: "Readings : " + regionValue.name, details: details, discipline: "", coordinate: coordinate))
         }
     }
     
     
-    
     func updateTime(time: String){
-        self.updatedDate.tintColor = UIColor.black
         var timestamp:NSString = time as NSString
         if time.count > 10{
             timestamp = timestamp.substring(to: 10) as NSString
@@ -111,7 +110,7 @@ class ViewController: UIViewController  {
 
 // MARK: - extenion
 extension ViewController: MKMapViewDelegate {
-        func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
                  calloutAccessoryControlTapped control: UIControl) {
         let location = view.annotation as! MapHelper
         let launchOptions = [MKLaunchOptionsDirectionsModeKey:
@@ -120,3 +119,4 @@ extension ViewController: MKMapViewDelegate {
     }
     
 }
+

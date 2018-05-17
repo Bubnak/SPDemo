@@ -10,6 +10,8 @@ import UIKit
 
 class PSIService: NSObject {
     
+    let psiURL = "https://api.data.gov.sg/v1/environment/psi"
+    
     typealias JSONDictionary = [String: Any]
     typealias Result = ([Region]?,Items?, String) -> ()
     
@@ -26,7 +28,7 @@ class PSIService: NSObject {
 
 func urlSession(completion: @escaping Result) {
     
-    if var urlComponents = URLComponents(string: "https://api.data.gov.sg/v1/environment/psi") {
+    if var urlComponents = URLComponents(string: psiURL) {
         guard let url = urlComponents.url else { return }
         // 4
         dataTask = defaultSession.dataTask(with: url) { data, response, error in
@@ -49,7 +51,6 @@ func urlSession(completion: @escaping Result) {
     }
     
     }
-    
     
     
     fileprivate func updateResults(_ data: Data) {
