@@ -10,38 +10,66 @@ import UIKit
 import MapKit
 
 class ViewController: UIViewController  {
-    
-    
         
     let psiService = PSIService()
     var mapHelper: [MapHelper] = []
-    
-    @IBOutlet weak var mapView: MKMapView!
     let regionRadius: CLLocationDistance = 100000
+    
+    @IBOutlet weak var updatedDate: UIBarButtonItem!
+    @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.callPSIAPI()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        psiService.urlSession(){ regionResult,itemResult, errorMessage in
-            if let regionResult = regionResult {
-                self.updateMapView(region: regionResult, item: itemResult!)
-            }
-            if !errorMessage.isEmpty { print("Search error: " + errorMessage) }
-        }
+        self.callPSIAPI()
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: - ButtonAction
+    @IBAction func refreshBtnClick(_ sender: Any) {
+        self.callPSIAPI()
+    }
+    
+    
+    
+    
      // MARK: - Helper methods
+    func callPSIAPI(){
+        if Reachability.isConnectedToNetwork(){
+            psiService.urlSession(){ regionResult,itemResult, errorMessage in
+                if let regionResult = regionResult , let itemResult = itemResult{
+                    self.updateMapView(region: regionResult, item: itemResult)
+                    self.updateTime(time: itemResult.updateTimeStamp)
+                }
+                if !errorMessage.isEmpty { print("Search error: " + errorMessage) }
+            }
+            print("Internet Connection Available!")
+        }else{
+            let alert = UIAlertController(title: "No Internet Connection!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Close", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            print("Internet Connection not Available!")
+            self.updatedDate.tintColor = UIColor.red
+            self.updatedDate.title = "No internet connection!!!!!!!!!!"
+        }
+        
+        
+    }
+    
     func updateMapView(region:[Region], item:Items) {
         mapView.delegate = self
         mapView.register(MapView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         loadInitialData(region: region, item: item)
         mapView.addAnnotations(mapHelper)
     }
-    
     
     func loadInitialData(region:[Region], item:Items) {
         for regionValue in region {
@@ -70,12 +98,18 @@ class ViewController: UIViewController  {
     }
     
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    
+    func updateTime(time: String){
+        self.updatedDate.tintColor = UIColor.black
+        var timestamp:NSString = time as NSString
+        if time.count > 10{
+            timestamp = timestamp.substring(to: 10) as NSString
+        }
+        self.updatedDate.title = "Last Updated: " + (timestamp as String)
     }
 }
 
-
+// MARK: - extenion
 extension ViewController: MKMapViewDelegate {
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView,
                  calloutAccessoryControlTapped control: UIControl) {

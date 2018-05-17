@@ -19,25 +19,42 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="OgQ-fk-Ucj">
-                                <rect key="frame" x="0.0" y="34" width="375" height="633"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="602"/>
                             </mapView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZI4-z9-5zt">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <items>
+                                    <navigationItem id="iqb-6f-U8A">
+                                        <barButtonItem key="leftBarButtonItem" title="Last Created Date : 10 may 2018" id="ofE-q4-2Dw"/>
+                                        <barButtonItem key="rightBarButtonItem" title="Refresh" style="done" id="Cjb-MY-SOD">
+                                            <connections>
+                                                <action selector="refreshBtnClick:" destination="BYZ-38-t0r" id="CaW-dZ-Lsz"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="OgQ-fk-Ucj" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="DKk-YU-dTU"/>
-                            <constraint firstItem="OgQ-fk-Ucj" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="34" id="GiF-xb-q9U"/>
-                            <constraint firstItem="OgQ-fk-Ucj" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="URU-ac-SZK"/>
-                            <constraint firstItem="OgQ-fk-Ucj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="oWA-nc-xLb"/>
+                            <constraint firstItem="ZI4-z9-5zt" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="FFY-po-dWS"/>
+                            <constraint firstItem="ZI4-z9-5zt" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="G6O-Ju-zu7"/>
+                            <constraint firstItem="OgQ-fk-Ucj" firstAttribute="top" secondItem="ZI4-z9-5zt" secondAttribute="bottom" id="Gyk-cz-BbW"/>
+                            <constraint firstItem="OgQ-fk-Ucj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Hbr-Mv-UaH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="OgQ-fk-Ucj" secondAttribute="bottom" constant="1" id="KXB-bN-33V"/>
+                            <constraint firstItem="OgQ-fk-Ucj" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="kba-li-bB4"/>
+                            <constraint firstItem="ZI4-z9-5zt" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="l8v-FK-2Ff"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="mapView" destination="OgQ-fk-Ucj" id="u3K-Xp-pYN"/>
+                        <outlet property="updatedDate" destination="ofE-q4-2Dw" id="ga5-d6-TkY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="115.27093596059113"/>
+            <point key="canvasLocation" x="136.80000000000001" y="114.69265367316342"/>
         </scene>
     </scenes>
 </document>
